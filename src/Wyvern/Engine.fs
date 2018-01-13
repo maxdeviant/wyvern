@@ -27,15 +27,8 @@ type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit) 
     base.Draw gameTime
 
 let init loadContent unloadContent =
-  // @TODO: The engine never gets disposed, so this may create the possibility
-  // for a memory leak. Will need to investigate further to determine whether
-  // it is actually an issue.
-  let engine = new GameEngine(loadContent, unloadContent)
-  
   let run () =
+    use engine = new GameEngine(loadContent, unloadContent)
     engine.Run()
 
-  let exit () =
-    engine.Exit()
-
-  run, exit
+  run
