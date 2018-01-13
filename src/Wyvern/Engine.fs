@@ -1,8 +1,11 @@
 ﻿module Wyvern.Engine
 
 open Microsoft.Xna.Framework
+open Units
 
-type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit) as this =
+type DeltaTime = float<s>
+
+type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: DeltaTime -> unit) as this =
   inherit Game()
 
   do this.IsFixedTimeStep <- false
@@ -10,6 +13,9 @@ type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit) 
   let graphics = new GraphicsDeviceManager(this)
   // @TODO Set vsync based on user settings.
   do graphics.SynchronizeWithVerticalRetrace <- false
+
+  let getDeltaTime (gameTime: GameTime): DeltaTime =
+    LanguagePrimitives.FloatWithMeasure gameTime.ElapsedGameTime.TotalSeconds
 
   override __.Initialize() =
     base.Initialize()
@@ -21,14 +27,16 @@ type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit) 
     unloadContent()
 
   override __.Update gameTime =
+    update (getDeltaTime gameTime)
     base.Update gameTime
 
   override __.Draw gameTime =
+    render (getDeltaTime gameTime)
     base.Draw gameTime
 
-let init loadContent unloadContent =
+let init loadContent unloadContent update render =
   let run () =
-    use engine = new GameEngine(loadContent, unloadContent)
+    use engine = new GameEngine(loadContent, unloadContent, update, render)
     engine.Run()
 
   run

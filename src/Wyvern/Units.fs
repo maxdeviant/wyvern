@@ -1,5 +1,9 @@
 ﻿module Wyvern.Units
 
+/// Second.
+[<Measure>]
+type s
+
 /// Radian.
 [<Measure>]
 type rad
