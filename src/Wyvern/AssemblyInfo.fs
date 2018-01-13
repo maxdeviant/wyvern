@@ -12,7 +12,7 @@ open System.Runtime.InteropServices
 [<assembly: AssemblyConfiguration("")>]
 [<assembly: AssemblyCompany("")>]
 [<assembly: AssemblyProduct("Wyvern")>]
-[<assembly: AssemblyCopyright("Copyright ©  2018")>]
+[<assembly: AssemblyCopyright("Copyright © Marshall Bowers 2018")>]
 [<assembly: AssemblyTrademark("")>]
 [<assembly: AssemblyCulture("")>]
 
