@@ -12,16 +12,34 @@ type Texture internal (texture: Texture2D) =
     override __.Dispose() =
       __.Texture.Dispose()
 
-let loadTexture graphicsDevice contentRoot path =
-  let absolutePath = Path.Combine (contentRoot path)
+let private loadTexture graphicsDevice contentRoot path =
+  let absolutePath = Path.Combine(contentRoot, path)
   try
     use fileStream = new FileStream(absolutePath, FileMode.Open)
     Some (new Texture(Texture2D.FromStream(graphicsDevice, fileStream)))
   with
   | _ -> None
 
-let createTexture graphicsDevice (width, height) color =
+let private createTexture graphicsDevice (width, height) color =
   let texture = new Texture2D(graphicsDevice, width, height)
   let colorData = [| for _ in 0 .. (width * height) - 1 -> Wyvern.MonoGameInterop.toColor color |]
   texture.SetData colorData
   new Texture(texture)
+
+type ITextureManager =
+  abstract member LoadTexture: string -> Texture option
+  abstract member CreateTexture: (int * int) -> Color -> Texture
+  abstract member UnloadTexture: Texture -> unit
+
+let makeTextureManager graphicsDevice contentRoot =
+  {
+    new ITextureManager with
+      member __.LoadTexture path =
+        loadTexture graphicsDevice contentRoot path
+
+      member __.CreateTexture size color =
+        createTexture graphicsDevice size color
+
+      member __.UnloadTexture texture =
+        (texture :> IDisposable).Dispose()
+  }
