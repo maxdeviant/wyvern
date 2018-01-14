@@ -56,7 +56,9 @@
     <Compile Include="Math.fs" />
     <Compile Include="Vector2.fs" />
     <Compile Include="Vector4.fs" />
+    <Compile Include="Color.fs" />
     <Compile Include="MonoGameInterop.fs" />
+    <Compile Include="Graphics.fs" />
     <Compile Include="Engine.fs" />
   </ItemGroup>
   <ItemGroup>
