@@ -5,6 +5,7 @@ open Microsoft.Xna.Framework.Graphics
 open Units
 open Wyvern.Graphics
 open System
+open Wyvern.Entities
 
 type DeltaTime = float<s>
 
@@ -31,7 +32,7 @@ type FpsCounter() =
   member __.Draw() =
     frameCount <- frameCount + 1
 
-type private GameEngine(loadContent: ITextureManager -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
+type private GameEngine(loadContent: IEntityManager -> ITextureManager -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
   inherit Game()
 
   do this.IsFixedTimeStep <- false
@@ -42,6 +43,7 @@ type private GameEngine(loadContent: ITextureManager -> unit, unloadContent: uni
 
   let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
   let mutable textureManager = Unchecked.defaultof<ITextureManager>
+  let entityManager = makeEntityManager()
   let fpsCounter = FpsCounter()
 
   let getDeltaTime (gameTime: GameTime): DeltaTime =
@@ -58,7 +60,7 @@ type private GameEngine(loadContent: ITextureManager -> unit, unloadContent: uni
   override __.LoadContent() =
     spriteBatch <- new SpriteBatch(__.GraphicsDevice)
     textureManager <- makeTextureManager __.GraphicsDevice __.Content.RootDirectory
-    loadContent textureManager
+    loadContent entityManager textureManager
 
   override __.UnloadContent() =
     unloadContent()
