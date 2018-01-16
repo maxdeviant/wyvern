@@ -1,7 +1,9 @@
-﻿module Wyvern.Entities
+﻿module Wyvern.EntityComponentSystem
 
 open System
-open Wyvern.Components
+
+type IComponent =
+  abstract member Name: string
 
 type EntityId = EntityId of Guid
 
@@ -10,15 +12,17 @@ type ITagged =
 
 type IEntity =
   inherit ITagged
+
   abstract member Id: EntityId
   abstract member Components: IComponent list
+
+type ISystem = interface end
 
 type IEntityManager =
   abstract member AddEntity: IEntity -> unit
 
 let makeEntityManager () =
   let mutable entities = []
-
   {
     new IEntityManager with
       member __.AddEntity entity =

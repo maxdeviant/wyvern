@@ -2,10 +2,10 @@
 
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
-open Units
-open Wyvern.Graphics
 open System
-open Wyvern.Entities
+open Units
+open Wyvern.EntityComponentSystem
+open Wyvern.Graphics
 
 type DeltaTime = float<s>
 

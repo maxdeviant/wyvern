@@ -59,8 +59,7 @@
     <Compile Include="Color.fs" />
     <Compile Include="MonoGameInterop.fs" />
     <Compile Include="Graphics.fs" />
-    <Compile Include="Components.fs" />
-    <Compile Include="Entities.fs" />
+    <Compile Include="EntityComponentSystem.fs" />
     <Compile Include="Engine.fs" />
   </ItemGroup>
   <ItemGroup>
