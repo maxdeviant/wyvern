@@ -32,7 +32,7 @@ type FpsCounter() =
   member __.Draw() =
     frameCount <- frameCount + 1
 
-type private GameEngine(loadContent: IEntityManager -> ITextureManager -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
+type private GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: IEntityManager<'TEntity> -> ITextureManager -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
   inherit Game()
 
   do this.IsFixedTimeStep <- false
@@ -78,9 +78,7 @@ type private GameEngine(loadContent: IEntityManager -> ITextureManager -> unit, 
     __.Window.Title <- sprintf "[%d fps]" fpsCounter.Fps
     fpsCounter.Draw()
 
-let init loadContent unloadContent update render =
-  let run () =
-    use engine = new GameEngine(loadContent, unloadContent, update, render)
-    engine.Run()
-
-  run
+type WyvernEngine<'TEntity when 'TEntity :> IEntity>() =
+  member __.Run loadContent unloadContent update render =
+    use internalEngine = new GameEngine<'TEntity>(loadContent, unloadContent, update, render)
+    internalEngine.Run()
