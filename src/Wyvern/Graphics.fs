@@ -27,8 +27,13 @@ let private createTexture graphicsDevice (width, height) color =
   new Texture(texture)
 
 type ITextureManager =
+  /// Loads a texture from the given path.
   abstract member LoadTexture: string -> Texture option
-  abstract member CreateTexture: (int * int) -> Color -> Texture
+
+  /// Creates a new texture filled with the given color.
+  abstract member CreateTexture: (int * int) * Color -> Texture
+
+  /// Unloads the given texture.
   abstract member UnloadTexture: Texture -> unit
 
 let makeTextureManager graphicsDevice contentRoot =
@@ -37,7 +42,7 @@ let makeTextureManager graphicsDevice contentRoot =
       member __.LoadTexture path =
         loadTexture graphicsDevice contentRoot path
 
-      member __.CreateTexture size color =
+      member __.CreateTexture(size, color) =
         createTexture graphicsDevice size color
 
       member __.UnloadTexture texture =

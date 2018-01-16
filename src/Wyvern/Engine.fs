@@ -31,7 +31,7 @@ type FpsCounter() =
   member __.Draw() =
     frameCount <- frameCount + 1
 
-type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
+type private GameEngine(loadContent: ITextureManager -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
   inherit Game()
 
   do this.IsFixedTimeStep <- false
@@ -58,7 +58,7 @@ type private GameEngine(loadContent: unit -> unit, unloadContent: unit -> unit, 
   override __.LoadContent() =
     spriteBatch <- new SpriteBatch(__.GraphicsDevice)
     textureManager <- makeTextureManager __.GraphicsDevice __.Content.RootDirectory
-    loadContent()
+    loadContent textureManager
 
   override __.UnloadContent() =
     unloadContent()
