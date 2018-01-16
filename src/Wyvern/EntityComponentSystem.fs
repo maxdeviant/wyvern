@@ -1,14 +1,16 @@
-﻿module Wyvern.EntityComponentSystem
+﻿namespace Wyvern.EntityComponentSystem
 
 open System
 
-type IComponent =
-  abstract member Name: string
+// @TODO Move to core/engine?
+type ITagged =
+  abstract member Tags: int
 
 type EntityId = EntityId of Guid
 
-type ITagged =
-  abstract member Tags: int
+type IComponent =
+  abstract member Id: ComponentId.T
+  abstract member Name: string
 
 type IEntity =
   inherit ITagged
@@ -21,10 +23,17 @@ type ISystem = interface end
 type IEntityManager =
   abstract member AddEntity: IEntity -> unit
 
-let makeEntityManager () =
-  let mutable entities = []
-  {
-    new IEntityManager with
-      member __.AddEntity entity =
-        entities <- entity :: entities
-  }
+module EntityManager =
+  let makeEntityManager () =
+    let mutable entities = []
+    {
+      new IEntityManager with
+        member __.AddEntity entity =
+          entities <- entity :: entities
+    }
+
+module ComponentIdGenerator =
+  let mutable private id = 0
+  let next() =
+    id <- id + 1
+    id

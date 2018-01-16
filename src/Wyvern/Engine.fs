@@ -43,7 +43,7 @@ type private GameEngine(loadContent: IEntityManager -> ITextureManager -> unit, 
 
   let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
   let mutable textureManager = Unchecked.defaultof<ITextureManager>
-  let entityManager = makeEntityManager()
+  let entityManager = EntityManager.makeEntityManager()
   let fpsCounter = FpsCounter()
 
   let getDeltaTime (gameTime: GameTime): DeltaTime =
