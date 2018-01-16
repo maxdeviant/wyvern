@@ -37,13 +37,11 @@ type internal WyvernEngine<'TEntity when 'TEntity :> IEntity>(loadContent: unit 
 
   do this.IsFixedTimeStep <- false
   do this.Content.RootDirectory <- @"Content"
-  let graphics = new GraphicsDeviceManager(this)
+  let graphicsDeviceManager = new GraphicsDeviceManager(this)
   // @TODO Set vsync based on user settings.
-  do graphics.SynchronizeWithVerticalRetrace <- false
+  do graphicsDeviceManager.SynchronizeWithVerticalRetrace <- false
 
   let mutable spriteBatch = Unchecked.defaultof<SpriteBatch>
-  let mutable textureManager = Unchecked.defaultof<ITextureManager>
-  let entityManager = EntityManager.makeEntityManager()
   let fpsCounter = FpsCounter()
 
   let getDeltaTime (gameTime: GameTime): DeltaTime =
@@ -59,7 +57,6 @@ type internal WyvernEngine<'TEntity when 'TEntity :> IEntity>(loadContent: unit 
 
   override __.LoadContent() =
     spriteBatch <- new SpriteBatch(__.GraphicsDevice)
-    textureManager <- makeTextureManager __.GraphicsDevice __.Content.RootDirectory
     loadContent()
 
   override __.UnloadContent() =
