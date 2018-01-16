@@ -60,11 +60,7 @@ module Vector2 =
 
   /// Normalizes the given vector.
   let normalize vector =
-    assert (vector <> zero)
-    let value = 1.0 / Math.Sqrt ((vector.x ** 2.0) + (vector.y ** 2.0))
-    vector * value
-
-  /// Tries to normalize the given vector.
-  let tryNormalize vector =
     if vector = zero then None
-    else Some (normalize vector)
+    else 
+      let value = 1.0 / Math.Sqrt ((vector.x ** 2.0) + (vector.y ** 2.0))
+      Some (vector * value)
