@@ -62,7 +62,7 @@
     <Compile Include="ComponentId.fsi" />
     <Compile Include="ComponentId.fs" />
     <Compile Include="EntityComponentSystem.fs" />
-    <Compile Include="Engine.fs" />
+    <Compile Include="WyvernEngine.fs" />
     <Compile Include="WyvernGame.fs" />
   </ItemGroup>
   <ItemGroup>

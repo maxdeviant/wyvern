@@ -1,4 +1,4 @@
-﻿module Wyvern.Engine
+﻿namespace Wyvern
 
 open Microsoft.Xna.Framework
 open Microsoft.Xna.Framework.Graphics
@@ -32,7 +32,7 @@ type FpsCounter() =
   member __.Draw() =
     frameCount <- frameCount + 1
 
-type internal GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: unit -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: (DrawRequest -> unit) -> DeltaTime -> unit) as this =
+type internal WyvernEngine<'TEntity when 'TEntity :> IEntity>(loadContent: unit -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: (DrawRequest -> unit) -> DeltaTime -> unit) as this =
   inherit Game()
 
   do this.IsFixedTimeStep <- false
@@ -77,8 +77,3 @@ type internal GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: unit ->
     base.Draw gameTime
     __.Window.Title <- sprintf "[%d fps]" fpsCounter.Fps
     fpsCounter.Draw()
-
-type WyvernEngine<'TEntity when 'TEntity :> IEntity>() =
-  member __.Run loadContent unloadContent update render =
-    use internalEngine = new GameEngine<'TEntity>(loadContent, unloadContent, update, render)
-    internalEngine.Run()

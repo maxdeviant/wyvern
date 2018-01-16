@@ -1,14 +1,13 @@
 ﻿namespace Wyvern
 
 open Wyvern.EntityComponentSystem
-open Engine
 open Graphics
 open System
 open EntityComponentSystem.EntityManager
 
 [<AbstractClass>]
 type WyvernGame<'TEntity when 'TEntity :> IEntity>() as this =
-  let engine = new GameEngine<'TEntity>(this.LoadContent, this.UnloadContent, this.Update, this.Render)
+  let engine = new WyvernEngine<'TEntity>(this.LoadContent, this.UnloadContent, this.Update, this.Render)
 
   member __.EntityManager = makeEntityManager<'TEntity>()
   member __.TextureManager = makeTextureManager engine.GraphicsDevice engine.Content.RootDirectory
