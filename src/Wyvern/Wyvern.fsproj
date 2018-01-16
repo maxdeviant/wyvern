@@ -63,6 +63,7 @@
     <Compile Include="ComponentId.fs" />
     <Compile Include="EntityComponentSystem.fs" />
     <Compile Include="Engine.fs" />
+    <Compile Include="WyvernGame.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

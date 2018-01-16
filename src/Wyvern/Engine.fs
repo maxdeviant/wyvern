@@ -32,7 +32,7 @@ type FpsCounter() =
   member __.Draw() =
     frameCount <- frameCount + 1
 
-type private GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: IEntityManager<'TEntity> -> ITextureManager -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: ITextureManager -> (DrawRequest -> unit) -> DeltaTime -> unit) as this =
+type internal GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: unit -> unit, unloadContent: unit -> unit, update: DeltaTime -> unit, render: (DrawRequest -> unit) -> DeltaTime -> unit) as this =
   inherit Game()
 
   do this.IsFixedTimeStep <- false
@@ -60,7 +60,7 @@ type private GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: IEntityM
   override __.LoadContent() =
     spriteBatch <- new SpriteBatch(__.GraphicsDevice)
     textureManager <- makeTextureManager __.GraphicsDevice __.Content.RootDirectory
-    loadContent entityManager textureManager
+    loadContent()
 
   override __.UnloadContent() =
     unloadContent()
@@ -72,7 +72,7 @@ type private GameEngine<'TEntity when 'TEntity :> IEntity>(loadContent: IEntityM
 
   override __.Draw gameTime =
     spriteBatch.Begin(samplerState = SamplerState.PointClamp)
-    render textureManager requestDraw (getDeltaTime gameTime)
+    render requestDraw (getDeltaTime gameTime)
     spriteBatch.End()
     base.Draw gameTime
     __.Window.Title <- sprintf "[%d fps]" fpsCounter.Fps
